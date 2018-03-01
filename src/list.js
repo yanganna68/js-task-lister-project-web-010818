@@ -20,24 +20,28 @@ const List = (() => {
       button.setAttribute("data-id", this.id)
       button.setAttribute("class", "delete-list")
       button.innerText = "X"
+
+
+
       h2.innerText += this.title
       h2.appendChild(button)
       div.appendChild(h2)
 
+      // button.addEventListener("click", (event) =>{
+      //   div.parentNode.removeChild(div)
+      // })
+
       let ul = document.createElement('ul')
-      this.tasks.forEach((task) => {
-        let li = task.showTask()
 
-        ul.appendChild(li)
-      })
-
-
+      ul.setAttribute("id", this.id)
       div.appendChild(ul)
 
       ///iterate through all its tasks return it with li
 
       return div
     }
+
+
 
 
 

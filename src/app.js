@@ -6,11 +6,14 @@ class App{
     this.listSection = document.getElementById("lists")
     this.parentList = document.getElementById("parent-list")
     this.newListTitle = document.getElementById("new-list-title")
+    this.deleteButton = document.getElementsByClassName("delete-list")
 
   }
 
   addEventListeners(){
-    this.taskForm.setAttribute("style","display: none;")
+    if (this.lists.length === 0){
+      this.taskForm.setAttribute("style","display: none;")
+    }
     this.listForm.addEventListener("submit", (event) =>{
       event.preventDefault();
       let title = event.target.children[1].value
@@ -19,13 +22,15 @@ class App{
       this.lists.push(list)
       let listItem = list.showList()
 
+
       this.parentList.innerHTML = ""
-      this.lists.forEach((item) => {
-        let option = document.createElement('option')
-        option.setAttribute("data-id",item.id)
-        option.innerText = item.title
-        this.parentList.appendChild(option)
-      })
+      this.renderOption();
+      // this.lists.forEach((item) => {
+      //   let option = document.createElement('option')
+      //   option.setAttribute("data-id",item.id)
+      //   option.innerText = item.title
+      //   this.parentList.appendChild(option)
+      // })
       this.taskForm.setAttribute("style","display: block;")
       this.listSection.appendChild(listItem)
       this.newListTitle.value = ""
@@ -50,13 +55,37 @@ class App{
       let task = new Task(description, priority)
       foundList.tasks.push(task)
 
-      let listTasks = foundList.showList()
-      this.listSection.appendChild(listTasks)
-
+      // this.listSection.appendChild(listTasks)xs
+        let li = task.showTask()
+        let ul = document.getElementById(foundList.id)
+        ul.appendChild(li)
 
     })
 
+    this.listSection.addEventListener("click", (event) => {
+      if(event.target.className === "delete-list"){
+        const listId = parseInt(event.target.dataset.id)
+        this.lists = this.lists.filter(list => list.id !== listId)
+        let ul = document.getElementById(listId)
+        ul.parentNode.parentNode.removeChild(ul.parentNode)
+        this.renderOption();
+        if (this.lists.length === 0){
+          this.taskForm.setAttribute("style","display: none;")
+        }
+      }
+    })
 
+
+  }
+
+  renderOption(){
+    this.parentList.innerHTML = ""
+    this.lists.forEach((item) => {
+      let option = document.createElement('option')
+      option.setAttribute("data-id",item.id)
+      option.innerText = item.title
+      this.parentList.appendChild(option)
+    })
   }
 
 
